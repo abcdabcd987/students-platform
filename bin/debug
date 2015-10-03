@@ -1,0 +1,2 @@
+#!/bin/bash
+DEBUG=students-platform:* npm start

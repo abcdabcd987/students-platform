@@ -1,0 +1,52 @@
+extends layout
+
+block content
+  form.form-horizontal(action='/user/register', method='post')
+    fieldset
+      // Form Name
+      legend User Register
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='username') Username
+        .col-md-4
+          input#username.form-control.input-md(name='username', type='text', placeholder='', required='')
+      // Password input
+      .form-group
+        label.col-md-4.control-label(for='password') Password
+        .col-md-4
+          input#password.form-control.input-md(name='password', type='password', placeholder='', required='')
+      // Password input
+      .form-group
+        label.col-md-4.control-label(for='repassword') Re-Password
+        .col-md-4
+          input#repassword.form-control.input-md(name='repassword', type='password', placeholder='The same as the above password', required='')
+      // hr
+      .form-group
+        .col-md-4
+        .col-md-4
+          hr
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='name') Real Name
+        .col-md-4
+          input#name.form-control.input-md(name='name', type='text', placeholder='(Optional)')
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='studentid') Student ID
+        .col-md-4
+          input#studentid.form-control.input-md(name='studentid', type='text', placeholder='(Optional)')
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='year') Admission year
+        .col-md-4
+          input#year.form-control.input-md(name='year', type='number', min='2002', placeholder='(Optional) 4 digits')
+      // hr
+      .form-group
+        .col-md-4
+        .col-md-4
+          hr
+      // Button
+      .form-group
+        label.col-md-4.control-label(for='register')
+        .col-md-4
+          button#register.btn.btn-primary Register

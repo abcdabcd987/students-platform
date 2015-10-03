@@ -1,0 +1,15 @@
+extends layout
+
+block head
+  title Test Homepage
+  
+block content
+  h2 User
+  ul
+    li #[a(href='/user/register') Register]
+    li #[a(href='/user/logout') Logout]
+    li #[a(href='/user/modify') Modify]
+  h2 Speech
+  ul
+    li #[a(href='/speech/new') New Speech]
+    li #[a(href='/speech/list') Speech List]
