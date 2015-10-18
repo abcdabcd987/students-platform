@@ -5,3 +5,15 @@
 .short-input {
     width: 8em !important;
 }
+
+.monospace {
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+}
+
+.table-modify-resource {
+    /*white-space: nowrap;*/
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    word-break: break-all
+}

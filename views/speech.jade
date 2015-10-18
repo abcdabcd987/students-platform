@@ -1,0 +1,73 @@
+extends layout
+
+block head
+  link(href="/vendor/video.js/dist/video-js.css", rel="stylesheet")
+  title #{speaker.name}: #{speech.title} - #{speech.subtitle}
+
+mixin video(title, src, desc)
+  .panel.panel-default
+    .panel-heading
+      h3.panel-title #{title}
+    .panel-body
+      .videocontent
+        video.speech-video.video-js.vjs-default-skin.vjs-big-play-centered(controls, preload='auto', data-setup='{}', width='480')
+          source(src='#{src}', type='video/mp4')
+          p.vjs-no-js
+            | To view this video please enable JavaScript, and consider upgrading to a web browser that
+            a(href='http://videojs.com/html5-video-support/', target='_blank') supports HTML5 video
+      
+      p= desc
+
+mixin audio(title, src, desc)
+  .panel.panel-default
+    .panel-heading
+      h3.panel-title #{title}
+    .panel-body
+      .videocontent
+        audio.speech-audio.video-js.vjs-default-skin.vjs-big-play-centered(controls, preload='auto', data-setup='{}', width='480')
+          source(src='#{src}', type='video/mp3')
+          p.vjs-no-js
+            | To view this video please enable JavaScript, and consider upgrading to a web browser that
+            a(href='http://videojs.com/html5-video-support/', target='_blank') supports HTML5 video
+      
+      p= desc
+
+mixin staffs(role, people)
+  if people
+    .row
+      .staff-role.col-md-2
+        p #{role}
+      .staff-people.col-md-10
+        each r in people
+          span.label.label-default= (r.value in staffs ? staffs[r.value].name : r.value)
+
+block content
+  .page-header
+    h1 #[span.label.label-primary #{speaker.name} (#{speaker.year}级)] #{speech.title} #[small= speech.subtitle]
+
+  each r in resources['Speech Video'] ? resources['Speech Video'] : {}
+    +video('演讲视频', r.value, r.description)
+  each r in resources['Speech Audio'] ? resources['Speech Audio'] : {}
+    +audio('演讲录音', r.value, r.description)
+  each r in resources['Comments Video'] ? resources['Comments Video'] : {}
+    +video('老师点评视频', r.value, r.description)
+  each r in resources['Comments Audio'] ? resources['Comments Audio'] : {}
+    +audio('老师点评录音', r.value, r.description)
+
+  if resources['Presenter'] || resources['Questioner'] || resources['Filming']
+    #staffs
+      .panel.panel-default
+        .panel-heading
+          h3.panel-title Staffs
+        .panel-body
+          +staffs('主持人', resources['Presenter'])
+          +staffs('提问者', resources['Questioner'])
+          +staffs('摄像', resources['Filming'])
+
+  if session.isAdmin
+    #action-box
+      a.btn.btn-danger(href='/s/#{speech.urlname}/modify') Modify
+
+  
+append script
+  script(src='/vendor/video.js/dist/video.min.js')

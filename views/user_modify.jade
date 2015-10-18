@@ -1,51 +1,43 @@
 extends layout
 
+block head
+  title Update User Information
+
 block content
   form.form-horizontal(action='/user/modify', method='post')
     fieldset
       // Form Name
-      legend User Register
+      legend 修改个人信息
       // Text input
       .form-group
-        label.col-md-4.control-label(for='username2') Username
+        label.col-md-4.control-label(for='studentid') 学号
         .col-md-4
-          input(type='hidden', name='username', value='#{session.user.username}')
-          input#username.form-control.input-md(name='username2', type='text', placeholder='', disabled, value='#{session.user.username}')
+          input#studentid.form-control.input-md(name='studentid', type='text', disabled, value='#{session.user.studentID}')
       // Password input
       .form-group
-        label.col-md-4.control-label(for='oldpassword') Old Password
+        label.col-md-4.control-label(for='oldpassword') 旧密码
         .col-md-4
-          input#password.form-control.input-md(name='oldpassword', type='password', placeholder='Fill if you want to change password')
+          input#password.form-control.input-md(name='oldpassword', type='password', placeholder='如果要更改密码，请填写旧密码')
       // Password input
       .form-group
-        label.col-md-4.control-label(for='password') Password
+        label.col-md-4.control-label(for='password') 新密码
         .col-md-4
-          input#password.form-control.input-md(name='password', type='password', placeholder='Fill if you want to change password')
+          input#password.form-control.input-md(name='password', type='password', placeholder='如果要更改密码，请填写新密码')
       // Password input
       .form-group
-        label.col-md-4.control-label(for='repassword') Re-Password
+        label.col-md-4.control-label(for='repassword') 新密码验证
         .col-md-4
-          input#repassword.form-control.input-md(type='password', placeholder='The same as the above')
-      // hr
-      .form-group
-        .col-md-4
-        .col-md-4
-          hr
+          input#repassword.form-control.input-md(type='password', placeholder='如果要更改密码，请填写新密码')
       // Text input
       .form-group
-        label.col-md-4.control-label(for='name') Real Name
+        label.col-md-4.control-label(for='name') 真实姓名
         .col-md-4
-          input#name.form-control.input-md(name='name', type='text', placeholder='(Optional)', value='#{session.user.name}')
+          input#name.form-control.input-md(name='name', type='text', placeholder='', value='#{session.user.name}', required)
       // Text input
       .form-group
-        label.col-md-4.control-label(for='studentid') Student ID
+        label.col-md-4.control-label(for='year') 入学年份
         .col-md-4
-          input#studentid.form-control.input-md(name='studentid', type='text', placeholder='(Optional)', value='#{session.user.studentID}')
-      // Text input
-      .form-group
-        label.col-md-4.control-label(for='year') Admission year
-        .col-md-4
-          input#year.form-control.input-md(name='year', type='number', min='2002', placeholder='(Optional) 4 digits', value='#{session.user.year}')
+          input#year.form-control.input-md(name='year', type='number', placeholder='4位数', value='#{session.user.year}', required)
       // hr
       .form-group
         .col-md-4
@@ -55,4 +47,4 @@ block content
       .form-group
         label.col-md-4.control-label(for='update')
         .col-md-4
-          button#register.btn.btn-primary Update
+          button#register.btn.btn-primary 更新

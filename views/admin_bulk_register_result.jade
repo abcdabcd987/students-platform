@@ -1,0 +1,29 @@
+extends layout
+
+block head
+  title Admin - Bulk Register
+
+block content
+  .page-header
+    h1 #[span.label.label-danger Admin] Bulk Register
+
+  .alert.alert-success(role="alert")
+    | #[strong Succeeded!] Backup the following information right now! There is no second chance!
+
+  table.table.table-striped.table-bordered.table-condensed
+    thead
+      tr
+        th #
+        th StudentID
+        th Name
+        th Password
+        th Admission Year
+    tbody.monospace
+      each u, i in users
+        tr
+          td= i+1
+          td= u.studentID
+          td= u.name
+          td= u.password
+          td= u.year
+

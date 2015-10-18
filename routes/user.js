@@ -8,22 +8,12 @@ exports.getRegister = function(req, res, next) {
     res.render('user_register', { session: req.session, });
 }
 
-function parseUserForm(req) {
-    return {
-        username: req.body.username,
-        password: req.body.password,
-        name: req.body.name,
-        studentID: req.body.studentid,
-        year: parseInt(req.body.year, 10) || 0
-    };
-}
-
 exports.postRegister = function(req, res, next) {
     if (req.session.isLogin) {
         return next(new Error('You have already logged in'));
     }
 
-    let u = parseUserForm(req);
+    let u = models.User.parse(req.body);
 
     utils.genPassword(u.password)
     .then(hashedPwd => {
@@ -42,14 +32,14 @@ exports.postLogin = function(req, res, next) {
         return next(new Error('You have already logged in'));
     }
 
-    let pUser = models.User.findOne({ where: { username: req.body.username } });
+    let pUser = models.User.getByStudentID(req.body.studentID);
     let pCheckPwd = pUser.then(user => utils.checkPassword(req.body.password, user.password));
     Promise.join(pUser, pCheckPwd, (user, isPwdCorrect) => {
         if (isPwdCorrect) {
             utils.setUserSession(req.session, user);
             return res.redirect('/');
         }
-        throw new Error('Incorrect username/password');
+        throw new Error('Incorrect studentID/password');
     })
     .catch(err => next(err));
 }
@@ -75,13 +65,9 @@ exports.postModify = function(req, res, next) {
         return next(new Error('You have not logged in yet'));
     }
 
-    let u = parseUserForm(req);
+    let u = models.User.parse(req.body);
     let isChangePwd = u.password ? true : false;
-    let pUser = models.User.findOne({ where: { username: u.username } })
-                .then(user => {
-                    if (!user) throw new Error('User not found');
-                    return user;
-                });
+    let pUser = models.User.getByStudentID(u.studentID);
     if (isChangePwd) {
         var pNewPwd = pUser.then(user => utils.checkPassword(req.body.oldpassword, user.password))
                       .then(isPwdCorrect => {
@@ -98,7 +84,8 @@ exports.postModify = function(req, res, next) {
         } else {
             u.password = user.password;
         }
-        u.username = user.username;
+        u.id = user.id;
+        u.studentID = user.studentID;
         return user.update(u);
     })
     .then(user => {

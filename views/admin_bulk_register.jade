@@ -1,0 +1,21 @@
+extends layout
+
+block head
+  title Admin - Bulk Register
+
+block content
+  .page-header
+    h1 #[span.label.label-danger Admin] Bulk Register
+
+  form.form-horizontal(action='/admin/bulk_register', method='post')
+    fieldset
+      // Textarea
+      .form-group
+        label.col-md-3.control-label(for='data') Student Information
+        .col-md-9
+          textarea.form-control.monospace#data(name='data', placeholder="Format: StudentID  [TAB]  Name  [TAB]  AdmissionYear\nTips  : Copy from Microsoft Excel or Apple Numbers\n        Spaces will be ignored.\ne.g.\n\n5140309001\t张三\t2014\n5140309002\t李四\t2014\n5140309003\t王五\t2014\n", rows="16")
+      // Button
+      .form-group
+        label.col-md-4.control-label(for='register')
+        .col-md-4
+          button#register.btn.btn-primary Bulk Register

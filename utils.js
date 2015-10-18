@@ -21,6 +21,28 @@ exports.genPassword = function (password) {
     });
 }
 
+exports.bulkRandomPassword = function (count) {
+    const PWD_BYTES = 4;
+
+    let pPlains = crypto.randomBytesAsync(PWD_BYTES * count).then(bytes => {
+        let str = bytes.toString('hex');
+        let length = str.length / count;
+        let plains = [];
+        for (var i = 0; i < count; ++i)
+            plains.push(str.substr(length*i, length));
+        return plains;
+    });
+    let pHashes = pPlains.then(plains => {
+        return Promise.all(plains.map(exports.genPassword));
+    });
+    return Promise.join(pPlains, pHashes, (plains, hashes) => {
+        let pwds = [];
+        for (var i = 0; i < count; ++i)
+            pwds.push({ plain: plains[i], hash: hashes[i] });
+        return pwds;
+    });
+}
+
 exports.checkPassword = function (password, correct) {
     let splited = correct.split(':');
     let algorithm = splited[0];
@@ -28,7 +50,6 @@ exports.checkPassword = function (password, correct) {
     let keylen = parseInt(splited[2], 10);
     let salt = splited[3];
     let hash = splited[4];
-    console.info('checkPassword', algorithm, iterations, keylen, salt, hash, password);
 
     return hashPassword(algorithm, iterations, keylen, salt, password)
            .then(h => hash === h);
@@ -37,9 +58,11 @@ exports.checkPassword = function (password, correct) {
 exports.setUserSession = function(session, user) {
     session.isLogin = true;
     session.user = user;
+    session.isAdmin = true; // Fix me
 }
 
 exports.clearUserSession = function(session) {
     session.isLogin = false;
     session.user = {};
+    session.isAdmin = false; // Fix me
 }

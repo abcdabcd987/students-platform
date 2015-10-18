@@ -1,4 +1,4 @@
-# Created by https://www.gitignore.io/api/node,osx
+# Created by https://www.gitignore.io/api/node,osx,bower
 
 ### Node ###
 # Logs
@@ -58,3 +58,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+### Bower ###
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp

@@ -1,0 +1,52 @@
+extends layout
+
+block head
+  title New Speech
+
+block content
+  form.form-horizontal(action='/speech/new', method='post')
+    fieldset
+      // Form Name
+      legend New Speech
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='studentID') Speaker
+        .col-md-4
+          input#studentID.form-control.input-md(name='studentID', type='text', placeholder='', required, value='#{session.user.studentID}')
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='title') Title
+        .col-md-4
+          input#title.form-control.input-md(name='title', type='text', placeholder='', required)
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='subtitle') Subtitle
+        .col-md-4
+          input#title.form-control.input-md(name='subtitle', type='text', placeholder='(Optional)')
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='date') Date
+        .col-md-4
+          input#date.form-control.input-md(name='date', type='text', placeholder='YYYY-MM-DD', required, value='#{moment().format("YYYY-MM-DD")}')
+      // Text input
+      .form-group
+        label.col-md-4.control-label(for='urlname') URL Name
+        .col-md-4
+          .input-group
+            span.input-group-addon.monospace /s/
+            input#urlname.form-control.input-md.monospace(name='urlname', type='text', placeholder='e.g. soylent', required)
+      // Textarea
+      .form-group
+        label.col-md-4.control-label(for='description') Description
+        .col-md-4
+          textarea#description.form-control(name='description', placeholder='(Optional)')
+      // hr
+      .form-group
+        .col-md-4
+        .col-md-4
+          hr
+      // Button
+      .form-group
+        label.col-md-4.control-label(for='new')
+        .col-md-4
+          button.btn.btn-primary New

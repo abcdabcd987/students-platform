@@ -1,0 +1,25 @@
+extends layout
+
+block head
+  title Speech List
+
+block content
+  .page-header
+    h1 演讲列表
+
+  table.table.table-striped.table-hover
+    thead
+      tr
+        th 姓名
+        th 标题
+        th 日期
+        th
+    tbody
+      each s in speeches
+        tr
+          - var speaker = speakers[s.studentID];
+          td #[strong= speaker.name] #[span.label.label-primary #{speaker.year}级]
+          td #[strong= s.title]#{s.subtitle ? ': ' + s.subtitle : ''}
+          td #{moment(s.date).format('YYYY-MM-DD')}
+          th #[a(href="/s/#{s.urlname}") #[span.glyphicon.glyphicon-eye-open] Watch]
+

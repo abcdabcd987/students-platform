@@ -1,0 +1,133 @@
+extends layout
+
+block head
+  title Modify #{speaker.name}: #{speech.title} - #{speech.subtitle}
+
+mixin input-hidden(name, value)
+  input(type='hidden', name='type', value='#{value}')
+mixin input-text(name, label, placeholder, value) 
+  .form-group
+    label.col-md-4.control-label(for='#{name}') #{label}
+    .col-md-4
+      input.form-control.input-md(id='#{name}', name='#{name}', type='text', placeholder='#{placeholder}')
+mixin input-textarea(name, label, placeholder, value) 
+  .form-group
+    label.col-md-4.control-label(for='#{name}') #{label}
+    .col-md-4
+      textarea.form-control(id='#{name}', name='#{name}', placeholder='#{placeholder}') #{value}
+mixin input-select(name, label, options) 
+  .form-group
+    label.col-md-4.control-label(for='#{name}') #{label}
+    .col-md-4
+      select.form-control(id='#{name}', name='#{name}')
+        for o in options
+          option(value='#{o}') #{o}
+mixin input-button(name, text) 
+  .form-group
+    label.col-md-4.control-label(for='#{name}')
+    .col-md-4
+      button.btn.btn-primary(id="#{name}", name='#{name}') #{text}
+
+block content
+  .page-header
+    h1 #[span.label.label-primary= speaker.name] #{speech.title} #[small= speech.subtitle] #[small #[a.btn.btn-default(href="/s/#{speech.urlname}") back]]
+
+  .panel.panel-default
+    .panel-heading
+      h3.panel-title Basic Information
+    .panel-body
+      form.form-horizontal#form-modify-speech(method='post')
+        feildset
+          +input-hidden('type', 'basic')
+          // Text input
+          .form-group
+            label.col-md-4.control-label(for='speaker') Speaker
+            .col-md-4
+              input#speaker.form-control.input-md(type='text', placeholder='', disabled, value='#{session.user.name}')
+          // Text input
+          .form-group
+            label.col-md-4.control-label(for='title') Title
+            .col-md-4
+              input#title.form-control.input-md(name='title', type='text', placeholder='', required, value='#{speech.title}')
+          // Text input
+          .form-group
+            label.col-md-4.control-label(for='subtitle') Subtitle
+            .col-md-4
+              input#title.form-control.input-md(name='subtitle', type='text', placeholder='(Optional)', value='#{speech.subtitle}')
+          // Text input
+          .form-group
+            label.col-md-4.control-label(for='date') Date
+            .col-md-4
+              input#date.form-control.input-md(name='date', type='text', placeholder='YYYY-MM-DD', required, value='#{moment(speech.date).format("YYYY-MM-DD")}')
+          // Text input
+          .form-group
+            label.col-md-4.control-label(for='urlname') URL Name
+            .col-md-4
+              .input-group
+                span.input-group-addon.monospace /s/
+                input#urlname.form-control.input-md.monospace(name='urlname', type='text', placeholder='e.g. soylent', required, value='#{speech.urlname}')
+          // Textarea
+          .form-group
+            label.col-md-4.control-label(for='description') Description
+            .col-md-4
+              textarea#description.form-control(name='description', placeholder='(Optional)')= speech.description
+          // Button
+          .form-group
+            label.col-md-4.control-label(for='new')
+            .col-md-4
+              button.btn.btn-primary Update
+    
+  .panel.panel-default
+    .panel-heading
+      h3.panel-title Add Resources
+    .panel-body
+      form.form-horizontal#form-add-video(method='post')
+        fieldset
+          legend Add a Video
+          +input-hidden('type', 'video')
+          +input-select('key', 'Title', ['Speech Video', 'Comments Video'])
+          +input-text('value', 'URL', 'http://example.com/video.mp4', '')
+          +input-textarea('description', 'Description', '(Optional)')
+          +input-button('add', 'Add')
+
+
+      form.form-horizontal#form-add-audio(method='post')
+        fieldset
+          legend Add an Audio
+          +input-hidden('type', 'audio')
+          +input-select('key', 'Title', ['Speech Audio', 'Comments Audio'])
+          +input-text('value', 'URL', 'http://example.com/audio.mp3', '')
+          +input-textarea('description', 'Description', '(Optional)')
+          +input-button('add', 'Add')
+
+          
+      form.form-horizontal#form-add-staff(method='post')
+        fieldset
+          legend Add a Staff
+          +input-hidden('type', 'staff')
+          +input-select('key', 'Role', ['Questioner', 'Presenter', 'Filming'])
+          +input-text('value', 'Person', 'Student ID')
+          +input-button('add', 'Add')
+
+  each v, k in resources
+    .panel.panel-default
+      .panel-heading
+        h3.panel-title Modify #[span.label.label-default #{k}]
+      table.table.table-modify-resource
+        thead
+          tr
+            th.col-md-1 type
+            th.col-md-3 key
+            th.col-md-4 value
+            th.col-md-3 description
+            th.col-md-1 #
+        tbody
+          each res in v
+            tr
+              td= res.type
+              td= res.key
+              td.monospace= res.value
+              td= res.description
+              td #{res.id}
+  
+append script
