@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
                 return {
                     password: obj.password,
                     name: obj.name,
-                    studentID: obj.studentid,
+                    studentID: obj.studentID,
                     year: parseInt(obj.year, 10) || 0
                 }
             }

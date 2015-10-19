@@ -1,7 +1,7 @@
 extends layout
 
 block head
-  link(href="/vendor/video.js/dist/video-js.css", rel="stylesheet")
+  link(href="#{ROOT}vendor/video.js/dist/video-js.css", rel="stylesheet")
   title #{speaker.name}: #{speech.title} - #{speech.subtitle}
 
 mixin video(title, src, desc)
@@ -40,10 +40,13 @@ mixin staffs(role, people)
       .staff-people.col-md-10
         each r in people
           span.label.label-default= (r.value in staffs ? staffs[r.value].name : r.value)
+          | &nbsp;
 
 block content
   .page-header
     h1 #[span.label.label-primary #{speaker.name} (#{speaker.year}级)] #{speech.title} #[small= speech.subtitle]
+    p
+      | #{speech.views} Views
 
   each r in resources['Speech Video'] ? resources['Speech Video'] : {}
     +video('演讲视频', r.value, r.description)
@@ -58,7 +61,7 @@ block content
     #staffs
       .panel.panel-default
         .panel-heading
-          h3.panel-title Staffs
+          h3.panel-title 相关人员
         .panel-body
           +staffs('主持人', resources['Presenter'])
           +staffs('提问者', resources['Questioner'])
@@ -66,8 +69,8 @@ block content
 
   if session.isAdmin
     #action-box
-      a.btn.btn-danger(href='/s/#{speech.urlname}/modify') Modify
+      a.btn.btn-danger(href='#{ROOT}s/#{speech.urlname}/modify') Modify
 
   
 append script
-  script(src='/vendor/video.js/dist/video.min.js')
+  script(src='#{ROOT}vendor/video.js/dist/video.min.js')

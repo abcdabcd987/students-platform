@@ -3,6 +3,7 @@
 const Promise = require('bluebird');
 const utils = require('../utils');
 const models = require('../models');
+const config = require('../config');
 
 exports.getRegister = function(req, res, next) {
     res.render('user_register', { session: req.session, });
@@ -22,7 +23,7 @@ exports.postRegister = function(req, res, next) {
     })
     .then(user => {
         utils.setUserSession(req.session, user);
-        res.redirect('/');
+        res.redirect(`${config.root}`);
     })
     .catch(err => next(err));
 }
@@ -37,7 +38,7 @@ exports.postLogin = function(req, res, next) {
     Promise.join(pUser, pCheckPwd, (user, isPwdCorrect) => {
         if (isPwdCorrect) {
             utils.setUserSession(req.session, user);
-            return res.redirect('/');
+            return res.redirect(`${config.root}`);
         }
         throw new Error('Incorrect studentID/password');
     })
@@ -49,7 +50,7 @@ exports.getLogout = function(req, res, next) {
         return next(new Error('You have not logged in yet'));
     }
     utils.clearUserSession(req.session);
-    res.redirect('/');
+    res.redirect(`${config.root}`);
 }
 
 exports.getModify = function(req, res, next) {
@@ -67,7 +68,7 @@ exports.postModify = function(req, res, next) {
 
     let u = models.User.parse(req.body);
     let isChangePwd = u.password ? true : false;
-    let pUser = models.User.getByStudentID(u.studentID);
+    let pUser = models.User.getByStudentID(req.session.user.studentID);
     if (isChangePwd) {
         var pNewPwd = pUser.then(user => utils.checkPassword(req.body.oldpassword, user.password))
                       .then(isPwdCorrect => {
@@ -90,7 +91,7 @@ exports.postModify = function(req, res, next) {
     })
     .then(user => {
         utils.setUserSession(req.session, user);
-        res.redirect('/');
+        res.redirect(`${config.root}`);
     })
     .catch(err => next(err));
 }

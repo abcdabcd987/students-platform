@@ -4,8 +4,8 @@ html(lang='en')
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(href='/vendor/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
-    link(href='/css/style.css', rel='stylesheet')
+    link(href='#{ROOT}vendor/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(href='#{ROOT}css/style.css', rel='stylesheet')
     block head
       title Welcome
   body
@@ -17,11 +17,11 @@ html(lang='en')
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/') 学子讲坛
+          a.navbar-brand(href='#{ROOT}') 学子讲坛
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav
             li
-              a(href='/speech/list') #[span.glyphicon.glyphicon-th-list] 演讲列表
+              a(href='#{ROOT}speech/list') #[span.glyphicon.glyphicon-th-list] 演讲列表
 
             if session.isAdmin
               li.dropdown
@@ -30,7 +30,9 @@ html(lang='en')
                   span.caret
                 ul.dropdown-menu
                   li
-                    a(href='/admin/bulk_register') 批量注册用户
+                    a(href='#{ROOT}admin/reset_password') 重置用户密码
+                  li
+                    a(href='#{ROOT}admin/bulk_register') 批量注册用户
 
           if session.isLogin
             ul.nav.navbar-nav.navbar-right
@@ -41,23 +43,23 @@ html(lang='en')
                 ul.dropdown-menu
                   if session.isAdmin
                     li
-                      a(href='/speech/new') 添加演讲
+                      a(href='#{ROOT}speech/new') 添加演讲
                     li.divider(role='separator')
                   li
-                    a(href='/user/modify') 修改个人信息
+                    a(href='#{ROOT}user/modify') 修改个人信息
                   li
-                    a(href='/user/logout') 登出
+                    a(href='#{ROOT}user/logout') 登出
           else
-            form.navbar-form.navbar-right(action='/user/login', method='post')
+            form.navbar-form.navbar-right(action='#{ROOT}user/login', method='post')
               .form-group
                   input.form-control.input-sm.short-input(type='text', name='studentID', placeholder='Student ID')
               .form-group
                   input.form-control.input-sm.short-input(type='password', name='password', placeholder='Password')
               button.btn.btn-info.btn-sm(type='submit') 登入
-              //a.btn.btn-success.btn-sm(href='/user/register') Register
+              //a.btn.btn-success.btn-sm(href='#{ROOT}user/register') Register
 
     .container
       block content
-    script(src='/vendor/jquery/dist/jquery.min.js')
-    script(src='/vendor/bootstrap/dist/js/bootstrap.min.js')
+    script(src='#{ROOT}vendor/jquery/dist/jquery.min.js')
+    script(src='#{ROOT}vendor/bootstrap/dist/js/bootstrap.min.js')
     block script

@@ -11,5 +11,7 @@ module.exports = {
     },
     speechesPerPage: 50,
 
+    root: '/sp/',
+
     sessionSecret: 'session secret',
 };

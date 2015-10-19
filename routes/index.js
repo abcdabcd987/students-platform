@@ -23,5 +23,7 @@ router.post('/s/:urlname/modify', speech.postModify);
 
 router.get ('/admin/bulk_register', admin.getBulkRegister);
 router.post('/admin/bulk_register', admin.postBulkRegister);
+router.get ('/admin/reset_password', admin.getResetPassword);
+router.post('/admin/reset_password', admin.postResetPassword);
 
 module.exports = router;

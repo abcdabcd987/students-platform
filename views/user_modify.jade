@@ -4,15 +4,17 @@ block head
   title Update User Information
 
 block content
-  form.form-horizontal(action='/user/modify', method='post')
+  form.form-horizontal(action='#{ROOT}user/modify', method='post')
     fieldset
       // Form Name
       legend 修改个人信息
+      // Hidden
+      input(type="hidden", name="studentID", value="#{session.user.studentID}")
       // Text input
       .form-group
-        label.col-md-4.control-label(for='studentid') 学号
+        label.col-md-4.control-label(for='studentID') 学号
         .col-md-4
-          input#studentid.form-control.input-md(name='studentid', type='text', disabled, value='#{session.user.studentID}')
+          input#studentID.form-control.input-md(type='text', disabled, value='#{session.user.studentID}')
       // Password input
       .form-group
         label.col-md-4.control-label(for='oldpassword') 旧密码

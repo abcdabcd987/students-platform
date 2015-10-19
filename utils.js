@@ -1,6 +1,7 @@
 'use strict';
 
 let Promise = require('bluebird');
+let randomstring = require('randomstring');
 let crypto = Promise.promisifyAll(require('crypto'));
 
 function hashPassword(algorithm, iterations, keylen, salt, password) {
@@ -21,26 +22,22 @@ exports.genPassword = function (password) {
     });
 }
 
-exports.bulkRandomPassword = function (count) {
-    const PWD_BYTES = 4;
+exports.randomPassword = function() {
+    const PWD_LENGTH = 8;
+    let plain = randomstring.generate(PWD_LENGTH);
+    return exports.genPassword(plain).then(hash => {
+        return {
+            plain: plain,
+            hash: hash
+        }
+    })
+}
 
-    let pPlains = crypto.randomBytesAsync(PWD_BYTES * count).then(bytes => {
-        let str = bytes.toString('hex');
-        let length = str.length / count;
-        let plains = [];
-        for (var i = 0; i < count; ++i)
-            plains.push(str.substr(length*i, length));
-        return plains;
-    });
-    let pHashes = pPlains.then(plains => {
-        return Promise.all(plains.map(exports.genPassword));
-    });
-    return Promise.join(pPlains, pHashes, (plains, hashes) => {
-        let pwds = [];
-        for (var i = 0; i < count; ++i)
-            pwds.push({ plain: plains[i], hash: hashes[i] });
-        return pwds;
-    });
+exports.bulkRandomPassword = function(count) {
+    let arr = [];
+    for (let i = 0; i < count; ++i)
+        arr.push(exports.randomPassword());
+    return Promise.all(arr);
 }
 
 exports.checkPassword = function (password, correct) {
@@ -58,7 +55,7 @@ exports.checkPassword = function (password, correct) {
 exports.setUserSession = function(session, user) {
     session.isLogin = true;
     session.user = user;
-    session.isAdmin = true; // Fix me
+    session.isAdmin = user.studentID === 'abcdabcd987'; // Fix me
 }
 
 exports.clearUserSession = function(session) {

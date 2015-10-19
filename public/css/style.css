@@ -17,3 +17,12 @@
     text-overflow: ellipsis;
     word-break: break-all
 }
+
+@media only screen and (max-width: 500px) {
+    .speech-audio, .speech-video {
+        width: 240px;
+        max-width: 240px;
+        height: 150px;
+        max-height: 150px;
+    }
+}

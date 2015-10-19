@@ -4,7 +4,7 @@ block head
   title New Speech
 
 block content
-  form.form-horizontal(action='/speech/new', method='post')
+  form.form-horizontal(action='#{ROOT}speech/new', method='post')
     fieldset
       // Form Name
       legend New Speech
@@ -33,7 +33,7 @@ block content
         label.col-md-4.control-label(for='urlname') URL Name
         .col-md-4
           .input-group
-            span.input-group-addon.monospace /s/
+            span.input-group-addon.monospace #{ROOT}s/
             input#urlname.form-control.input-md.monospace(name='urlname', type='text', placeholder='e.g. soylent', required)
       // Textarea
       .form-group

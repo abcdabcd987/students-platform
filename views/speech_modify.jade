@@ -30,7 +30,7 @@ mixin input-button(name, text)
 
 block content
   .page-header
-    h1 #[span.label.label-primary= speaker.name] #{speech.title} #[small= speech.subtitle] #[small #[a.btn.btn-default(href="/s/#{speech.urlname}") back]]
+    h1 #[span.label.label-primary= speaker.name] #{speech.title} #[small= speech.subtitle] #[small #[a.btn.btn-default(href="#{ROOT}s/#{speech.urlname}") back]]
 
   .panel.panel-default
     .panel-heading
@@ -43,7 +43,7 @@ block content
           .form-group
             label.col-md-4.control-label(for='speaker') Speaker
             .col-md-4
-              input#speaker.form-control.input-md(type='text', placeholder='', disabled, value='#{session.user.name}')
+              input#speaker.form-control.input-md(type='text', placeholder='', disabled, value='#{speaker.name}')
           // Text input
           .form-group
             label.col-md-4.control-label(for='title') Title
@@ -64,7 +64,7 @@ block content
             label.col-md-4.control-label(for='urlname') URL Name
             .col-md-4
               .input-group
-                span.input-group-addon.monospace /s/
+                span.input-group-addon.monospace #{ROOT}s/
                 input#urlname.form-control.input-md.monospace(name='urlname', type='text', placeholder='e.g. soylent', required, value='#{speech.urlname}')
           // Textarea
           .form-group

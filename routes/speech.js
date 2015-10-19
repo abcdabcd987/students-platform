@@ -3,6 +3,7 @@
 const Promise = require('bluebird');
 const utils = require('../utils');
 const models = require('../models');
+const config = require('../config');
 
 exports.getNewSpeech = function(req, res, next) {
     if (!req.session.isAdmin) {
@@ -19,7 +20,7 @@ exports.postNewSpeech = function(req, res, next) {
 
     let s = models.Speech.parse(req.body);
     models.Speech.create(s).then(speech => {
-        res.redirect(`/s/${speech.urlname}`);
+        res.redirect(`${config.root}s/${speech.urlname}`);
     })
     .catch(err => next(err));
 }
@@ -67,7 +68,7 @@ exports.postModify = function(req, res, next) {
             s.studentID = speech.studentID;
             s.id = speech.id;
             speech.update(s).then(() => {
-                res.redirect(`/s/${speech.urlname}/modify`);
+                res.redirect(`${config.root}s/${speech.urlname}/modify`);
             })
         });
         return;
@@ -80,7 +81,7 @@ exports.postModify = function(req, res, next) {
 
     Promise.join(pSpeech, pSpeaker, pPermission, pCreateResosurce, pAssociateResource,
         (speech, speaker, _1, resource, _2) => {
-            res.redirect(`/s/${speech.urlname}/modify`);
+            res.redirect(`${config.root}s/${speech.urlname}/modify`);
         })
     .catch(next);
 }
@@ -91,7 +92,10 @@ exports.getSpeech = function(req, res, next) {
     }
 
     let urlname = req.params.urlname;
-    let pSpeech = models.Speech.findOne({ where: { urlname: urlname } });
+    let pSpeech = models.Speech.findOne({ where: { urlname: urlname } }).then(speech => {
+        if (!speech) throw new Error('该演讲不存在');
+        return speech.increment('views');
+    });
     let pResources = pSpeech.then(speech => speech.getResources());
     let pSpeaker = pSpeech.then(speech => models.User.findOne({ where: { studentID: speech.studentID }}));
     let pStaffs = pResources.then(findStaffProfiles);

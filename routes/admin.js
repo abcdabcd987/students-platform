@@ -4,6 +4,39 @@ const Promise = require('bluebird');
 const utils = require('../utils');
 const models = require('../models');
 
+exports.getResetPassword = function(req, res, next) {
+    if (!req.session.isAdmin) {
+        return next(new Error('Permission Denied'));
+    }
+
+    res.render('admin_reset_password', { session: req.session });
+}
+
+exports.postResetPassword = function(req, res, next) {
+    if (!req.session.isAdmin) {
+        return next(new Error('Permission Denied'));
+    }
+
+    let stuid = req.body.studentID;
+    let pUser = models.User.findOne({ where: { studentID: stuid}});
+    let pPwd = pUser.then(user => {
+        if (!user) throw new Error('Student Not Found');
+        return utils.randomPassword();
+    });
+    let pUpdate = Promise.join(pUser, pPwd, (user, pwd) => {
+        user.password = pwd.hash;
+        return user.save();
+    })
+    Promise.join(pUser, pPwd, pUpdate, (_, pwd, user) => {
+        res.render('admin_reset_password_result', {
+            session: req.session,
+            user: user,
+            plain: pwd.plain,
+        });
+    })
+    .catch(next);
+}
+
 exports.getBulkRegister = function(req, res, next) {
     if (!req.session.isAdmin) {
         return next(new Error('Permission Denied'));
@@ -46,5 +79,5 @@ exports.postBulkRegister = function(req, res, next) {
             users: users
         });
     })
-    .catch(err => next(err));
+    .catch(next);
 }

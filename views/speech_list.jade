@@ -21,5 +21,5 @@ block content
           td #[strong= speaker.name] #[span.label.label-primary #{speaker.year}级]
           td #[strong= s.title]#{s.subtitle ? ': ' + s.subtitle : ''}
           td #{moment(s.date).format('YYYY-MM-DD')}
-          th #[a(href="/s/#{s.urlname}") #[span.glyphicon.glyphicon-eye-open] Watch]
+          th #[a(href="#{ROOT}s/#{s.urlname}") #[span.glyphicon.glyphicon-eye-open] Watch]
 
