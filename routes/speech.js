@@ -146,7 +146,7 @@ function findSpeakerProfiles(speeches) {
 }
 
 exports.getList = function(req, res, next) {
-    let pSpeeches = models.Speech.findAll();
+    let pSpeeches = models.Speech.findAll({order:[['date', 'DESC']]});
     let pSpeakers = pSpeeches.then(findSpeakerProfiles);
     Promise.join(pSpeeches, pSpeakers, (speeches, speakers) => {
         let obj_speakers = mapStudentID(speakers);
